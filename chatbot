@@ -1,0 +1,59 @@
+import time
+import random
+
+# A simple chatbot made using basic Python skills
+# It responds to some common inputs and simulates typing
+
+def typing_simulator(text):
+    for char in text:
+        print(char, end='', flush=True)
+        time.sleep(0.03)  # simulates typing
+    print()
+
+def chatbot():
+    print("Bot: Hi there! I'm Luna, your chat assistant.")
+    print("Bot: You can say things like 'hello', 'how are you', or 'bye' to end.")
+
+    while True:
+        user_input = input("You: ").lower().strip()
+
+        # Greetings
+        if user_input == "hello" or user_input == "hi" or user_input == "hey":
+            response = random.choice(["Hey!", "Hello!", "Hi, how can I help?"])
+            typing_simulator("Bot: " + response)
+
+        # Asking for bot's name
+        elif "your name" in user_input:
+            typing_simulator("Bot: I'm Luna! Just a simple chatbot made with Python.")
+
+        # Responding to 'how are you'
+        elif "how are you" in user_input:
+            typing_simulator("Bot: I'm doing great! Thanks for asking. What about you?")
+
+        # Replying if user says they are fine
+        elif "i'm good" in user_input or "i am fine" in user_input:
+            typing_simulator("Bot: That's great to hear!")
+
+        # Weather
+        elif "weather" in user_input:
+            typing_simulator("Bot: I can't check the weather, but I hope it's nice out!")
+
+        # Help
+        elif "help" in user_input:
+            typing_simulator("Bot: Try saying 'hello', 'how are you', or ask my name!")
+
+        # What can you do
+        elif "what can you do" in user_input:
+            typing_simulator("Bot: I can chat with you and keep you company for now!")
+
+        # Exit condition
+        elif user_input == "bye" or user_input == "exit" or user_input == "quit":
+            typing_simulator("Bot: Bye! It was nice talking to you.")
+            break
+
+        # Unknown input
+        else:
+            typing_simulator("Bot: Hmm, I didn't quite understand that. Can you try again?")
+
+# Run the chatbot
+chatbot()
