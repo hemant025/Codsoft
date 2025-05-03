@@ -1,0 +1,58 @@
+pip install pandas scikit-learn
+
+
+
+
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+# 1. Sample Movie Dataset
+data = {
+    'title': [
+        'The Matrix', 'John Wick', 'Avengers: Endgame',
+        'Iron Man', 'The Notebook', 'Titanic',
+        'Inception', 'Interstellar', 'The Godfather',
+        'The Dark Knight'
+    ],
+    'description': [
+        'A hacker discovers a dystopian reality controlled by machines.',
+        'An ex-hitman seeks revenge for his dog.',
+        'Superheroes fight to undo the damage caused by Thanos.',
+        'A billionaire builds a high-tech armored suit to fight crime.',
+        'A love story that spans a lifetime.',
+        'A romance blossoms on a doomed ship.',
+        'A thief enters people’s dreams to steal secrets.',
+        'Explorers travel through a wormhole in space.',
+        'The story of a mafia family.',
+        'Batman fights crime in Gotham city.'
+    ]
+}
+
+df = pd.DataFrame(data)
+
+# 2. Convert descriptions into TF-IDF vectors
+tfidf = TfidfVectorizer(stop_words='english')
+tfidf_matrix = tfidf.fit_transform(df['description'])
+
+# 3. Compute cosine similarity
+cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
+
+# 4. Recommend similar movies
+def recommend_movie(movie_title):
+    if movie_title not in df['title'].values:
+        return "Sorry, movie not found."
+
+    index = df[df['title'] == movie_title].index[0]
+    sim_scores = list(enumerate(cosine_sim[index]))
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+    sim_scores = sim_scores[1:6]  # Top 5 excluding the movie itself
+
+    print(f"\nBecause you liked '{movie_title}', you may also like:")
+    for i, score in sim_scores:
+        print(f" - {df['title'][i]}")
+
+# 5. Try it!
+if __name__ == "__main__":
+    movie_input = input("Enter a movie you like: ")
+    recommend_movie(movie_input)
